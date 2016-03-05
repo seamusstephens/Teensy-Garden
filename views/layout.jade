@@ -11,5 +11,12 @@ html
         block content
       .sidebar
         block sidebar
+        
+     button(onclick="move()") newPage
+      script.
+        function move() {
+          window.location.href = '/newpage'
+        }
+  
     footer
       p Running on node with Express, Jade and Stylus
