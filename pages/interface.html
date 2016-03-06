@@ -20,13 +20,13 @@
                 width:470px;
             }
             h2{
-            text-align:center;
+                text-align:center;
             }
             #myCanvas {
-            border: 2px dashed blue;
+                border: 2px dashed blue;
             }
-            #btnHolder, #sliderTxt{
-            text-align:center;
+            #btnHolder, #btnHolder2, #sliderTxt{
+                text-align:left;
             }
             
         </style>
@@ -38,7 +38,7 @@
             // canvas request for all browsers
             window.requestAnimFrame = (function(callback) {
                 return window.requestAnimationFrame || 
-                window.webkitRequestAnimationFrame || 
+                window.webkitRerquestAnimationFrame || 
                 window.mozRequestAnimationFrame || 
                 window.oRequestAnimationFrame || 
                 window.msRequestAnimationFrame ||
@@ -56,6 +56,7 @@
             var prevPotValue;
             //var onOff = false; 
             var toggleVal = 0;
+            var toggleVal2 = 0;
             
             function animation(poll1,text){
                 var canvas = document.getElementById("myCanvas");
@@ -66,7 +67,7 @@
                 
                 content.fillStyle = 'black';
                 content.textAlign = 'center';
-                content.font = '20pt TimesNewRoman';
+                content.font = '20pt Times New Roman';
                 
                 // make the wobbely values stop 
                 if(pollOneH*2 > prevPotValue+2 || pollOneH*2 < prevPotValue-2){
@@ -130,6 +131,7 @@
             
             function initButton(){
                 $( "#check" ).button();
+                $( "#check2" ).button();
             }
             
             function initSlider(){
@@ -152,6 +154,12 @@
                     toggleVal %= 2;
                     iosocket.emit('buttonval',toggleVal);
                 });
+                
+                $('#check2').click(function() {
+                    toggleVal2 += 1;
+                    toggleVal2 %= 2;
+                    iosocket.emit('buttonval',toggleVal2);
+                });
             });
             
         </script>
@@ -164,9 +172,15 @@
         
         <div id="sData">
             <h2>Data to Teensy</h2>
+            
             <div id="btnHolder">
                 <input type="checkbox" id="check" value="toggle"/><label for="check">Toggle LED</label>
             </div>
+            
+            <div id="btnHolder2">
+                <input type="checkbox" id="check2" value="toggle2"/><label for="check2">Toggle LED 2</label>
+            </div>
+            
             <p id="sliderTxt">LED Dimmer</p>
             <div id="slider"></div>
         </div> 
