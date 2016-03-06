@@ -36,6 +36,7 @@ void loop() {
       inputString += inChar; 
     }
   }
+  
   // Toggle LED 13
   if(!Serial.available() && toggleComplete == true)
   {
@@ -71,7 +72,7 @@ void loop() {
       Serial.print("E"); // end character
       prevValue = sensorValue;
     }  
-  delay(50); // give the Arduino some breathing room.
+  delay(500); // give the Arduino some breathing room.
 }
 
 int stringToInt()

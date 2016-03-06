@@ -1,0 +1,17 @@
+{
+  "name": "t-Garden",
+  "description": "Exercises for exploring the Arduino Experimenter's kit using johnny-five",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/seamusstephens/Teensy-Garden.git"
+  },
+  "dependencies": {
+    "express": "3.4.0",
+    "serialPort": "latest",
+    "socket.io": "latest"
+  }
+}

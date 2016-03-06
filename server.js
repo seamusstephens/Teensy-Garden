@@ -40,7 +40,7 @@ function initSocketIO(httpServer,debug)
 	console.log("user connected");
 	socket.emit('onconnection', {pollOneValue:sendData});
 	socketServer.on('update', function(data) {
-	socket.emit('updateData',{pollOneValue:data});
+	   socket.emit('update',{pollOneValue:data});
 	});
 	socket.on('buttonval', function(data) {
 		serialPort.write(data + 'E');
@@ -66,17 +66,18 @@ function serialListener(debug)
     });
  
     serialPort.on("open", function () {
-      console.log('open serial communication');
-            // Listens to incoming data
+        console.log('open serial communication');
+        // Listens to incoming data
         serialPort.on('data', function(data) {
-             receivedData += data.toString();
-          if (receivedData .indexOf('E') >= 0 && receivedData .indexOf('B') >= 0) {
-           sendData = receivedData .substring(receivedData .indexOf('B') + 1, receivedData .indexOf('E'));
-           receivedData = '';
-         }
-         // send the incoming data to browser with websockets.
-       socketServer.emit('update', sendData);
-      });  
+                receivedData += data.toString();
+            if (receivedData .indexOf('E') >= 0 && receivedData .indexOf('B') >= 0) {
+                sendData = receivedData .substring(receivedData .indexOf('B') + 1, receivedData .indexOf('E'));
+                receivedData = '';
+            }
+            
+             // send the incoming data to browser with websockets.
+            socketServer.emit('update', sendData);
+        });  
     });  
 }
 
