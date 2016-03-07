@@ -1,19 +1,34 @@
 <!DOCTYPE HTML>
  <html>
+
    <head>    
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
         <style>
             body {
-                margin: 0px;
-                padding: 0px;
+                margin: 5px;
+                padding: 5px;
+                background: lightblue;
+                font-family: Tahoma;
             }
-            #rData{
+            #tempData{
                 float:left;
-                margin-left:100px;
+                margin-left:50px;
                 margin-right:auto;
-                width:470px;
+                width:200px;
             }
-            #sData{
+            #lightData{
+                float:left;
+                margin-left:50px;
+                margin-right:auto;
+                width:200px;
+            }
+            #diagram{
+                float: center;
+                margin-left:20px;
+                margin-right:20px;
+                width:100px;
+            }
+            #zoneData{
                 float: right;
                 margin-left:auto;
                 margin-right:100px;
@@ -22,11 +37,14 @@
             h2{
                 text-align:center;
             }
-            #myCanvas {
-                border: 2px dashed blue;
+            #tempCanvas {
+                border: 1px dashed blue;
+            }
+            #lightCanvas {
+                border: 1px dashed blue;
             }
             #btnHolder, #btnHolder2, #sliderTxt{
-                text-align:left;
+                text-align: center;
             }
             
         </style>
@@ -59,15 +77,15 @@
             var toggleVal2 = 0;
             
             function animation(poll1,text){
-                var canvas = document.getElementById("myCanvas");
+                var canvas = document.getElementById("tempCanvas");
                 var content = canvas.getContext("2d");
                     
                 // clear canvas
-                content.clearRect(0, 0, 460, 540);
+                content.clearRect(0, 0, 200, 200);
                 
                 content.fillStyle = 'black';
                 content.textAlign = 'center';
-                content.font = '20pt Times New Roman';
+                content.font = '10pt Courier';
                 
                 // make the wobbely values stop 
                 if(pollOneH*2 > prevPotValue+2 || pollOneH*2 < prevPotValue-2){
@@ -75,10 +93,49 @@
                     potValue = pollOneH*2;
                 }
 
-                content.fillText('Potmeter value: ' + potValue, text.x, text.y);
+                content.fillText('Degrees: ' + potValue, text.x, text.y);
 
                 // render graph 
-                content.fillStyle = 'orange';
+                content.fillStyle = 'red';
+                content.fillRect(poll1.x,(poll1.y-poll1.h),poll1.w,poll1.h);
+                                    
+                content.fill();
+
+                // request new frame
+                requestAnimFrame(function() {
+                
+                    if(poll1.h < pollOneH){
+                        poll1.h += (pollOneH - poll1.h)*.15;
+                    }
+                    else if(poll1.h > pollOneH){
+                        poll1.h -= (poll1.h - pollOneH)*.15;
+                    }
+                    text.y = (poll1.y - poll1.h) - 5;
+                    animation(poll1,text);  
+                }); 
+            }
+            
+            function animation(poll1,text){
+                var canvas = document.getElementById("lightCanvas");
+                var content = canvas.getContext("2d");
+                    
+                // clear canvas
+                content.clearRect(0, 0, 200, 200);
+                
+                content.fillStyle = 'black';
+                content.textAlign = 'center';
+                content.font = '10pt Courier';
+                
+                // make the wobbely values stop 
+                if(pollOneH*2 > prevPotValue+2 || pollOneH*2 < prevPotValue-2){
+                    prevPotValue = potValue;
+                    potValue = pollOneH*2;
+                }
+
+                content.fillText('Lumens: ' + potValue, text.x, text.y);
+
+                // render graph 
+                content.fillStyle = 'yellow';
                 content.fillRect(poll1.x,(poll1.y-poll1.h),poll1.w,poll1.h);
                                     
                 content.fill();
@@ -116,8 +173,8 @@
             function initPoll(){
                 poll1 = {
                     x: 10,
-                    y: 540,
-                    w: 440,
+                    y: 200,
+                    w: 180,
                     h: 0
                 }
                 text = {
@@ -136,8 +193,8 @@
             
             function initSlider(){
                 $( "#slider" ).slider({
-                    min:70,
-                    max:200,
+                    min:0,
+                    max:100,
                     change: function(event,ui) {
                         iosocket.emit('sliderval',ui.value);
                     }
@@ -163,26 +220,38 @@
             });
             
         </script>
+        
+        <nav id="main-nav">
+            <img alt="logo" id="garden" src="/images/logo.png" height="42" width ="42">
+        </nav>
+        
     </head>
     <body>
-        <div id="rData">
-            <h2>Data from Teensy</h2>
-            <canvas id="myCanvas" width="460" height="540"></canvas>
+        
+        <div id="tempData">
+            <h2>Temperature Sensor Data</h2>
+            <canvas id="tempCanvas" width="200" height="200"></canvas>
+        </div>
+            
+        <div id="lightData">
+            <h2>Light Sensor Data</h2>
+            <canvas id="lightCanvas" width="200" height="200"></canvas>
         </div>
         
-        <div id="sData">
-            <h2>Data to Teensy</h2>
+        <div id="zoneData">
+            <h2>Zone Control</h2>
             
             <div id="btnHolder">
-                <input type="checkbox" id="check" value="toggle"/><label for="check">Toggle LED</label>
+                <input type="checkbox" id="check" value="toggle"/><label for="check">Toggle Zone 1</label>
             </div>
             
             <div id="btnHolder2">
-                <input type="checkbox" id="check2" value="toggle2"/><label for="check2">Toggle LED 2</label>
+                <input type="checkbox" id="check2" value="toggle2"/><label for="check2">Toggle Zone 2</label>
             </div>
             
-            <p id="sliderTxt">LED Dimmer</p>
-            <div id="slider"></div>
+            <p id="TimeSliderTxt">On Time</p>
+            <div id="TimeSlider"></div>
+            
         </div> 
     </body>
 </html>

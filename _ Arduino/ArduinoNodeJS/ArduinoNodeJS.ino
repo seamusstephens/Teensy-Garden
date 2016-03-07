@@ -73,7 +73,7 @@ void loop() {
       Serial.print("E"); // end character
       prevValue = sensorValue;
     }  
-  delay(500); // give the Arduino some breathing room.
+  delay(5); // give the Arduino some breathing room.
 }
 
 int stringToInt()
