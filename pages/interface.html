@@ -22,11 +22,17 @@
                 margin-right:auto;
                 width:200px;
             }
+            .container{
+                position: relative;
+            }
+            .topleft{
+                position: absolute;
+                top: 8px;
+                left: 12px;
+            }
             #diagram{
-                float: center;
-                margin-left:20px;
-                margin-right:20px;
-                width:100px;
+                opacity: 0.3;
+                float: left;
             }
             #zoneData{
                 float: right;
@@ -207,12 +213,14 @@
             
             $(document).ready(function() {
                 $('#check').click(function() {
+                    changeImage();
                     toggleVal += 1;
                     toggleVal %= 2;
                     iosocket.emit('buttonval',toggleVal);
                 });
                 
                 $('#check2').click(function() {
+                    changeImage2();
                     toggleVal2 += 1;
                     toggleVal2 %= 2;
                     iosocket.emit('buttonval',toggleVal2);
@@ -228,60 +236,59 @@
         <script src="assets/js/util.js"></script>
         <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
         <script src="assets/js/main.js"></script>
+        <script>
+            function changeImage() {
+                var image = document.getElementById('gardenPic');
+                if (image.src.match("gardenoff")) {
+                    image.src = "zone1on.png";
+                } else {
+                    image.src = "gardenoff.png";
+                }
+            }
+            function changeImage2() {
+                var image = document.getElementById('gardenPic');
+                if (image.src.match("gardenoff")) {
+                    image.src = "zone2on.png";
+                } else {
+                    image.src = "gardenoff.png";
+                }
+            }
+        </script>
 
 
       </head>
     <body>
              
-        <section id="sidebar">
-            <div class="inner">
-                <nav>
-                    <ul>
-                        <li><a href="#intro" class="scrolly active">Welcome</a></li>
-                        <li><a href="#one" class="scrolly">Who we are</a></li>
-                        <li><a href="#two" class="scrolly">What we do</a></li>
-                        <li><a href="#three" class="scrolly">Get in touch</a></li>
-                    </ul>
-                </nav>
+        <div class="container">
+            <img id="gardenPic" src="gardenoff.png">
+            
+            <div id="tempData" class="topleft">
+                <h2>Temperature Sensor Data</h2>
+                <canvas id="tempCanvas" width="200" height="200"></canvas>
             </div>
-        </section>
-        
-        <section id="intro" class="wrapper style1 fullscreen fade-up">
-            <div class="inner">
-                <h1>Hyperspace</h1>
-                <p>Just another fine responsive site template designed by <a href="http://html5up.net">HTML5 UP</a><br>
-                and released for free under the <a href="http://html5up.net/license">Creative Commons</a>.</p>
-                <ul class="actions">
-                    <li><a href="#one" class="button scrolly">Learn more</a></li>
-                </ul>
+  
+            <div id="lightData">
+                <h2>Light Sensor Data</h2>
+                <canvas id="lightCanvas" width="200" height="200"></canvas>
             </div>
-        </section>
- 
-        <div id="tempData">
-            <h2>Temperature Sensor Data</h2>
-            <canvas id="tempCanvas" width="200" height="200"></canvas>
+            
+            <div id="zoneData">
+                <h2>Zone Control</h2>
+                
+                <div id="btnHolder">
+                    <input type="checkbox" id="check" value="toggle"/><label for="check">Toggle Zone 1</label>
+                </div>
+                
+                <div id="btnHolder2">
+                    <input type="checkbox" id="check2" value="toggle2"/><label for="check2">Toggle Zone 2</label>
+                </div>
+                
+                <p id="TimeSliderTxt">On Time</p>
+                <div id="TimeSlider"></div>
+                
+            </div>
+            
         </div>
-            
-        <div id="lightData">
-            <h2>Light Sensor Data</h2>
-            <canvas id="lightCanvas" width="200" height="200"></canvas>
-        </div>
-        
-        <div id="zoneData">
-            <h2>Zone Control</h2>
-            
-            <div id="btnHolder">
-                <input type="checkbox" id="check" value="toggle"/><label for="check">Toggle Zone 1</label>
-            </div>
-            
-            <div id="btnHolder2">
-                <input type="checkbox" id="check2" value="toggle2"/><label for="check2">Toggle Zone 2</label>
-            </div>
-            
-            <p id="TimeSliderTxt">On Time</p>
-            <div id="TimeSlider"></div>
-            
-        </div> 
     </body>
 </html>
 
